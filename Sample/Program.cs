@@ -1,24 +1,100 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Sample
 {
     class Program
     {
-        //public static void rec()
-        static void Main(string[] args)
-        {
-            // 盤面を二次元配列で表し、-1で初期化する
-            int[][] field = new int[9][];
 
-            for (int i = 0; i < field.Length; i++)
+        public static void rec(ref int[,] field, ref List<int[,]> res)
+        {
+            int emptyi = -1;
+            int emptyj = -1;
+            for (int i = 0; i < 9 && emptyi == -1; i++)
             {
-                field[i] = new int[9];
-                for (int j = 0; j < field[i].Length; j++)
+                for (int j = 0; j < 9 && emptyj == -1; j++)
                 {
-                    field[i][j] = -1;
+                    if (field[i,j] == -1)
+                    {
+                        emptyi = i;
+                        emptyj = j;
+                        break;
+                    }
                 }
             }
 
+            if (emptyj == -1 || emptyj == -1)
+            {
+                res.Add(field);
+                return;
+            }
+            // 空きマスに入れられる数字を探す
+            bool[] number = new bool[10];
+            for (int i = 0; i < 10; i++)
+            {
+                number[i] = true;
+            }
+            for (int i = 0; i < 9; i++)
+            {
+                // 同じ列にあるか
+                if (field[emptyi, i] != -1) number[field[emptyi, i]] = false;
+                // 同じ行にあるか
+                if (field[i, emptyj] != -1) number[field[i, emptyj]] = false;
+
+                // 同じブロックにあるか
+                int bi = emptyi / 3 * 3 + 1;
+                int bj = emptyj / 3 * 3 + 1;
+                for (int di = bi - 1; di <= bi + 1; di++)
+                {
+                    for (int dj = bj - 1; dj <= bj + 1; dj++)
+                    {
+                        if (field[di, dj] != -1) number[field[di, dj]] = false;
+                    }
+                }
+            }
+
+            for (int v = 1; v <= 9; v++)
+            {
+                if (!number[v]) continue;
+                field[emptyi, emptyj] = v;
+                rec(ref field, ref res);
+            }
+
+            field[emptyi, emptyj] = -1;
+        }
+
+        static void Main(string[] args)
+        {
+            // 盤面を二次元配列に格納、-1は未定
+            int[,] field = new int[9,9];
+
+            for (int i = 0; i < 9; i++)
+            {
+                string line = Console.ReadLine();
+                for (int j = 0; j < 9; j++)
+                {
+                    if (line[j] == '*')
+                    {
+                        field[i,j] = -1;
+                        continue;
+                    }
+                    int num = (int)Char.GetNumericValue(line[j]);
+                    field[i,j] = num;   
+                }
+            }
+            List<int[,]> res = new List<int[,]>();
+            rec(ref field, ref res);
+
+            int[,] ans = new int[9,9];
+            ans = res[0];
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    Console.Write("{0} ", ans[i, j]); 
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
