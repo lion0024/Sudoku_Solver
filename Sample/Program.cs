@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Sample
 {
@@ -29,11 +30,8 @@ namespace Sample
                 return;
             }
             // 空きマスに入れられる数字を探す
-            bool[] number = new bool[10];
-            for (int i = 0; i < 10; i++)
-            {
-                number[i] = true;
-            }
+            bool[] number = Enumerable.Repeat<bool>(true, 10).ToArray();
+
             for (int i = 0; i < 9; i++)
             {
                 // 同じ列にあるか
