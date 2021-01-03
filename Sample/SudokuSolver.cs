@@ -26,6 +26,15 @@ namespace Sample
 
             if (emptyj == -1 || emptyj == -1)
             {
+                // 回答の表示(Mainで表示できなかったため要修正)
+                for (int i = 0; i < 9; i++)
+                {
+                    for (int j = 0; j < 9; j++)
+                    {
+                        Console.Write("{0} ", field[i, j]);
+                    }
+                    Console.WriteLine();
+                }
                 res.Add(field);
                 return;
             }
@@ -85,14 +94,14 @@ namespace Sample
 
             int[,] ans = new int[9,9];
             ans = res[0];
-            for (int i = 0; i < 9; i++)
+            /* for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
                 {
                     Console.Write("{0} ", ans[i, j]); 
                 }
                 Console.WriteLine();
-            }
+            } */
         }
     }
 }
