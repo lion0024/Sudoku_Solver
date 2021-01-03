@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Sample
 {
-    class Program
+    internal class SudokuSolver
     {
 
         public static void rec(ref int[,] field, ref List<int[,]> res)
